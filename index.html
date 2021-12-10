@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEW</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+<body>
+    <div class="header">
+        University Student Register
+    </div>
+    <div class="container">
+        <div class="left">
+            <div class="heading">
+                <h1 id="headingData">Add new student</h1>
+            </div>
+            <form onsubmit="event.preventDefault();onFormSubmit();" autocomplete="off">
+                <div>
+                    <label>Full Name</label>
+                    <input type="text" name="fullName" id="fullName" placeholder="Your full name.." required>
+                </div>
+                <div>
+                    <label>Your Gsuite Id</label>
+                    <input type="email" name="email" id="email" placeholder="Your official email" >
+                </div>
+                <div>
+                    <label>University Id</label>
+                    <input type="text" name="uid" id="uid" placeholder="University Id" required>
+                </div>
+                <div>
+                    <label for="deapartment">Your Department</label>
+                    <select id="department" name="deapartment">
+                    <option value="IT">IT</option>
+                    <option value="CSE">CSE</option>
+                    <option value="ECE">ECE</option>
+                    <option value="EE">EE</option>
+                    <option value="ME">ME</option>
+                    <option value="CE">CE</option>
+                    </select>
+                </div>
+                <div class="form-action-buttons">
+                    <input type="submit" value="Add" id="addBtn">
+                </div>
+              </form>
+        </div>
+        <div class="right">
+            <div class="top">
+                <div class="heading">
+                    <h1>Student Register</h1>
+                </div>
+                <div class="search">
+                    <input autocomplete="off" type="search" id="search" placeholder="search with ID!" onkeyup="search()"/>
+                </div>
+            </div>
+            <table class="list" id="studentList">
+                    <thead>
+                        <tr>
+                            <th>S. No.</th>
+                            <th>Full Name</th>
+                            <th>Gsuite Id</th>
+                            <th>University Id</th>
+                            <th>Branch</th>
+                            <th>Edit/Delete</th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
