@@ -1,13 +1,43 @@
 //buttons
 // showData();
+
+//load event
+document.addEventListener('DOMcontentloaded',getlocalstore);
+getlocalstore();
 // var storageArr = [];
 let arr = [];
 var selectedRow = null;
+
+//sort
+// function sortTable() {
+//     var table, rows, switching, i, x, y, shouldSwitch;
+//     table = document.getElementById("studentList").getElementsByTagName('tbody')[0];
+//     switching = true;
+//     while (switching) {
+//       switching = false;
+//       for (i = 1; i < tr.length; i++) {
+//         shouldSwitch = false;
+//         x = rows[i].getElementsById("td")[4];
+//         y = rows[i + 1].getElementsById("td")[4];
+//         if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+//           shouldSwitch = true;
+//           break;
+//         }
+//       }
+//       if (shouldSwitch) {
+//         tr[i].parentNode.insertBefore(tr[i + 1], tr[i]);
+//         switching = true;
+//       }
+//     }
+// }
+
+//submit
 function onFormSubmit(){
     var formData = readFormData();
     if(document.getElementById("addBtn").value == 'Update'){
         document.getElementById("addBtn").value = 'Add';
         document.getElementById("headingData").innerHTML = 'Add new student';
+        document.getElementById("addBtn").style.background = "#4CAF50";
     }
     if(selectedRow == null){
         insertNewRecord(formData);
@@ -15,7 +45,9 @@ function onFormSubmit(){
     else{
         updateRecord(formData);
     }
+    saveLocal(formData);
     resetForm();
+    // sortTable();
 }
 
 function readFormData(){
@@ -56,6 +88,7 @@ function resetForm(){
     selectedRow = null;
 }
 
+//update
 function onEdit(td){
     selectedRow = td.parentElement.parentElement;
     document.getElementById("fullName").value = selectedRow.cells[1].innerHTML;
@@ -63,8 +96,8 @@ function onEdit(td){
     document.getElementById("uid").value = selectedRow.cells[3].innerHTML;
     document.getElementById("department").value = selectedRow.cells[4].innerHTML;
     document.getElementById("addBtn").value = 'Update';
-    document.getElementById("headingData").innerHTML = 'Update student data';
-
+    document.getElementById("headingData").innerHTML = 'Update student';
+    document.getElementById("addBtn").style.background = "#6699CC";
 }
 
 function updateRecord(formData){
@@ -83,29 +116,6 @@ function onDelete(td){
     arr.pop();
 }
 
-showData();
-function saveData(){
-    let name, email, uid, department;
-    name = document.getElementById("fullName").value;
-    email = document.getElementById("email").value; 
-    uid = document.getElementById("uid").value;
-    department = document.getElementById("department").value;
-    let studentRecord = [];
-    studentRecord = JSON.parse(localStorage.getItem('student'))?JSON.parse(localStorage.getItem('student')):[];
-    if(studentRecord.some((v)=> {return v.uid = uid})){
-        alert("Duplicate Data");
-    }
-    else{
-        studentRecord.push({
-            "name": name,
-            "email": email,
-            "uid": uid,
-            "department": department
-        });
-        localStorage.setItem("student",JOSN.stringify(studentRecord));
-    }
-    showData();
-}
 
 //search
 function search(){
@@ -126,53 +136,40 @@ function search(){
     }
 }
 
-// //show data
-// function showData(){
-//     getData();
-//     // studentTable var tbl = document.getElementById("studentList");
+var storageArr=[];
 
-//     var x = studentList.rows.length;
-//     while(x--){
-//         studentList.deleteRow(x);
-//     }
+function saveLocal(formData){
+    storageArr = JSON.parse(localStorage.getItem('savedData')) || [];
+    storageArr.push(formData);   
+    localStorage.setItem('savedData',JSON.stringify(storageArr));
+    console.log(storageArr);
+}
+const index= 1;
+localStorage.setItem("index", JSON.stringify(index));
 
-//     for(let i=0;i<storageArr.length;i++){
-//         var table = document.getElementById("studentList").getElementsByTagName('tbody')[0];
-//         var newRow = table.insertRow(table.length);
-//         cell1 = newRow.insertCell(0);
-//         cell1.innerHTML = arr.length;
-//         cell2 = newRow.insertCell(1);
-//         cell2.innerHTML = storageArr[i].fullName;
-//         cell3 = newRow.insertCell(2);
-//         cell3.innerHTML = storageArr[i].email;
-//         cell4 = newRow.insertCell(3);
-//         cell4.innerHTML = storageArr[i].uid;
-//         cell5 = newRow.insertCell(4);
-//         cell5.innerHTML = storageArr[i].department;
-//         cell6 = newRow.insertCell(5);
-//         cell6.innerHTML = `<a onClick="onEdit(this)"><i class="far fa-edit fa-2x"></i></a>
-//         <a onClick="onDelete(this)"><i class="fas fa-trash fa-2x"></i></a>`;
-//     }
-// }
+function getlocalstore(){
+    var tbl = document.getElementById("studentList");
+    if(localStorage.getItem('savedData') === null){
+        storageArr = [];
+    }
+    else{
+        storageArr = JSON.parse(localStorage.getItem('savedData'));
+    }
+    for(let i=0;i<storageArr.length;i++){
+        var r = tbl.insertRow();
+        var cell1 = r.insertCell();
+        var cell2 = r.insertCell();
+        var cell3 = r.insertCell();
+        var cell4 = r.insertCell();
+        var cell5 = r.insertCell();
+        var cell6 = r.insertCell();
 
-// function addData(){
-//     getData();
-//     storageArr.push({
-//         fullName:document.getElementById("fullName").value,
-//         email:document.getElementById("email").value,
-//         uid:document.getElementById("uid").value,
-//         department:document.getElementById("department").value
-//     });
-//     localStorage.setItem("localData",JSON.stringify(storageArr));
-//     showData();
-// }
-
-// function getData(){
-//     var str =  localStorage.getItem("localData");
-//     if(str != null){
-//          storageArr = JSON.parse(str); 
-//     }
-// }
-// function deleteData(){
-//     localStorage.clear();
-// }
+        cell1.innerHTML = i+1;
+        cell2.innerHTML = storageArr[i]["fullName"];
+        cell3.innerHTML = storageArr[i]["email"];  
+        cell4.innerHTML = storageArr[i]["uid"];
+        cell5.innerHTML = storageArr[i]["department"];
+        cell6.innerHTML = `<a onClick="onEdit(this)"><i class="far fa-edit fa-2x"></i></a>
+       <a onClick="onDelete(this)"><i class="fas fa-trash fa-2x"></i></a>`;
+    }
+}
